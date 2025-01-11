@@ -16,7 +16,7 @@ const PageServices = () => {
             Mis{" "}
             <span className="font-bold text-tamarillo-500"> servicios.</span>
           </h1>
-          <p className="mb-10   text-gray-300">
+          <p className="mb-10 text-center  text-gray-300">
             ✨ ¡Transformo ideas en experiencias digitales únicas! ✨
             <br />
             ✨ Creo sitios web y aplicaciones atractivas, funcionales y
