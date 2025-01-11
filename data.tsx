@@ -14,6 +14,8 @@ import {
   Book,
   Rocket,
   Speech,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 
 export const socialNetworks = [
@@ -27,15 +29,16 @@ export const socialNetworks = [
     logo: <Linkedin size={30} strokeWidth={1} />,
     src: "https://www.linkedin.com/in/wilgrey-md-ravelo-cruz-50869232b/",
   },
+
   {
     id: 3,
-    logo: <Twitter size={30} strokeWidth={1} />,
-    src: "#!",
+    logo: <Facebook size={30} strokeWidth={1} />,
+    src: "https://www.facebook.com/wilgrey.ravelocruz.9",
   },
   {
     id: 4,
-    logo: <Rss size={30} strokeWidth={1} />,
-    src: "#!",
+    logo: <Instagram size={30} strokeWidth={1} />,
+    src: "https://www.instagram.com/wilgrey_mmd/",
   },
 ];
 
