@@ -2,6 +2,7 @@ import AvatarServices from "@/components/avatar-services";
 import CircleImage from "@/components/circle-Image";
 import SliderServices from "@/components/slider-services";
 import TransitionPages from "@/components/transition-pages";
+import Link from "next/link";
 import React from "react";
 
 const PageServices = () => {
@@ -27,9 +28,13 @@ const PageServices = () => {
             APIs eficientes con C# y Node.js para garantizar un rendimiento
             sólido. ¡Hagamos realidad tu proyecto! 🚀
           </p>
-          <button className=" hover:-translate-y-1 px-3 py-2 border border-white transition hover:border-transparent shadow-sm hover:shadow-tamarillo-500/50 hover:shadow-lg shadow-tamarillo-500/50 rounded-lg bg-secondary hover:bg-tamarillo-500">
+          <Link
+            href={"https://wa.me/18494061420?text=Saludos"}
+            target="_blank"
+            className=" hover:-translate-y-1 px-3 py-2 border border-white transition hover:border-transparent shadow-sm hover:shadow-tamarillo-500/50 hover:shadow-lg shadow-tamarillo-500/50 rounded-lg bg-secondary hover:bg-tamarillo-500"
+          >
             Contacta conmigo
-          </button>
+          </Link>
         </div>
 
         {/* SLIDER */}
