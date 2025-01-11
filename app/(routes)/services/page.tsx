@@ -17,8 +17,7 @@ const PageServices = () => {
             <span className="font-bold text-tamarillo-500"> servicios.</span>
           </h1>
           <p className="mb-10   text-gray-300">
-            ✨ ¡Transformo ideas en experiencias digitales únicas! ✨ Ofrezco ✨
-            ¡Transformo ideas en experiencias digitales únicas!
+            ✨ ¡Transformo ideas en experiencias digitales únicas! ✨
             <br />
             ✨ Creo sitios web y aplicaciones atractivas, funcionales y
             responsivas con HTML, CSS y JavaScript, diseñando interfaces que
