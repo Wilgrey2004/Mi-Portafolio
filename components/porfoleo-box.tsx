@@ -32,14 +32,14 @@ const PorfoleoBox = (props: porfoleoProps) => {
           target="_blank"
           className="p-2 transition duration-150 bg-slate-400 hover:bg-slate-500/80   rounded-lg"
         >
-          Github
+          Repositorio
         </Link>
         <Link
           href={urlDemo}
           target="_blank"
           className="p-2 transition duration-150 bg-tamarillo-500 hover:bg-tamarillo-500/50   rounded-lg"
         >
-          Live Demo
+          Ver Demo
         </Link>
       </div>
     </div>
