@@ -4,11 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Header from "@/components/header";
 
-import "./globals.css";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -20,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wilgrey MD Portafoleo",
-  description: "Wilgrey MD Portafoleo made by Wilgrey Ravelo Cruz",
+  title: "Wilgrey Ravelo Cruz | Desarrollador Full Stack",
+  description:
+    "Portafolio de Wilgrey Ravelo Cruz — Desarrollador Full Stack C# / .NET y React. Arquitectura Onion, desarrollo guiado por especificaciones y flujos asistidos por IA.",
 };
 
 export default function RootLayout({
@@ -30,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
