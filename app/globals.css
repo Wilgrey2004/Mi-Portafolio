@@ -20,8 +20,51 @@ main {
   }
 }
 
+@layer components {
+  /* Tarjeta reutilizable: fondo translúcido, blur, borde sutil y hover con acento */
+  .card-glass {
+    @apply relative rounded-2xl border border-white/10 bg-my-green-800/40 p-6 shadow-lg shadow-black/20 backdrop-blur-md transition-all duration-300;
+  }
+
+  .card-glass-hover {
+    @apply hover:-translate-y-1 hover:border-tamarillo-500/60 hover:shadow-xl hover:shadow-tamarillo-950/30;
+  }
+
+  /* Badge para tecnologías y etiquetas */
+  .tech-badge {
+    @apply inline-flex items-center rounded-full border border-white/10 bg-my-green-700/50 px-3 py-1 text-sm text-white/90 transition-all duration-200 hover:scale-105 hover:border-tamarillo-500/60 hover:bg-tamarillo-500/20;
+  }
+
+  /* Título de sección con acento */
+  .section-title {
+    @apply text-3xl font-bold leading-tight text-center md:text-5xl md:text-left;
+  }
+
+  /* Panel con corte diagonal — solo para elementos decorativos/contenedores
+     con padding holgado, nunca para texto que llegue al borde. */
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 88%);
+  }
+
+  .clip-diagonal-r {
+    clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
 .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
 .swiper-pagination-horizontal.swiper-pagination-bullets
   .swiper-pagination-bullet {
   background-color: #ff3333;
+}
+
+/* Respeta la preferencia de movimiento reducido del usuario */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
