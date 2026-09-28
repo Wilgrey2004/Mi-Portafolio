@@ -1,14 +1,11 @@
-import CoverParticles from "@/components/cover-particles";
-import TransitionPages from "@/components/transition-pages";
-import Image from "next/image";
+import LiquidBackground from "@/components/liquid-background";
 import Introduction from "./introduction";
 
 export default function Home() {
   return (
-    <main>
-      <TransitionPages />
-      <div className="flex min-h-[100vh] bg-norepeat bg-gradient-cover">
-        <CoverParticles />
+    <main id="main-content" className="relative isolate overflow-hidden">
+      <div className="relative flex min-h-[100svh] bg-[#09221e]">
+        <LiquidBackground variant="home" />
         <Introduction />
       </div>
     </main>

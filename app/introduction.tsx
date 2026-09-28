@@ -1,116 +1,69 @@
-"use client";
-
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
-import { MessageCircle, FolderGit2, FileText } from "lucide-react";
+import { FileText, FolderGit2, MessageCircle } from "lucide-react";
 import { contactInfo } from "@/data";
-import { fadeInUp, staggerContainer, staggerItem } from "@/utils/motion-transitions";
+import RotatingWords from "@/components/rotating-words";
 
-const Introduction = () => {
-  return (
-    <div className="z-20 flex items-center w-full min-h-[100vh] bg-my-green-700/40 backdrop-blur-[2px]">
-      <div className="z-20 grid items-center w-full max-w-6xl gap-6 px-6 py-24 mx-auto md:py-0 md:grid-cols-2">
-        <motion.div
-          variants={fadeInUp(0.1)}
-          initial="hidden"
-          animate="visible"
-          className="flex justify-center"
-        >
-          <Image
-            src="/home-4.png"
-            priority
-            width={600}
-            height={600}
-            alt="Wilgrey Ravelo Cruz"
-            className="w-full max-w-[420px] md:max-w-[520px] h-auto drop-shadow-2xl"
-          />
-        </motion.div>
+const Introduction = () => (
+  <div className="relative z-10 flex min-h-[100svh] w-full items-center">
+    <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-5 pb-40 pt-32 sm:px-8 md:grid-cols-2 md:gap-10 md:pb-40 md:pt-32">
+      <div className="order-2 flex justify-center md:order-1">
+        <Image
+          src="/home-4.png"
+          priority
+          width={600}
+          height={600}
+          alt="Ilustración de Wilgrey Ravelo Cruz"
+          className="h-auto w-full max-w-[270px] drop-shadow-xl sm:max-w-[340px] md:max-w-[500px]"
+        />
+      </div>
 
-        <motion.div
-          variants={staggerContainer(0.12, 0.15)}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col justify-center max-w-xl mt-5"
-        >
-          <motion.span
-            variants={staggerItem}
-            className="inline-block w-fit px-3 py-1 mb-4 mx-auto md:mx-0 text-sm rounded-full border border-tamarillo-500/50 bg-tamarillo-500/10 text-tamarillo-300"
-          >
-            Desarrollador Full Stack · C# / .NET & React
-          </motion.span>
+      <div className="reading-surface order-1 mx-auto flex w-full max-w-xl flex-col justify-center md:order-2 md:mx-0">
+        <h1 className="mb-5 text-balance text-center text-4xl font-semibold leading-tight tracking-tight sm:text-5xl md:text-left">
+          Las ideas se transforman en software al
+          <RotatingWords />
+        </h1>
 
-          <motion.h1
-            variants={staggerItem}
-            className="text-3xl leading-tight text-center md:text-left md:text-5xl mb-4"
-          >
-            Las ideas se transforman en software al momento de
-            <TypeAnimation
-              sequence={[
-                "programar",
-                2000,
-                "diseñar soluciones",
-                2000,
-                "aplicar arquitectura Onion",
-                2000,
-                "crear valor",
-                2000,
-                "trabajar con IA",
-                2000,
-                "conectar con usuarios",
-                2000,
-              ]}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-              className="block font-bold text-tamarillo-500"
-            />
-          </motion.h1>
+        <p className="mb-4 text-center text-base leading-relaxed text-gray-200 md:text-left">
+          Soy Wilgrey, desarrollador full stack con experiencia en backend y
+          frontend con C# / .NET 10 y React. Me encanta crear software y trabajar
+          con arquitectura cuidada y herramientas de IA.
+        </p>
+        <p className="mb-8 text-center text-sm leading-relaxed text-gray-300 md:text-left">
+          Desarrollo guiado por especificaciones para dar seguimiento claro a
+          cada etapa, mantener la calidad del código y que sepas cómo avanza
+          tu trabajo.
+        </p>
 
-          <motion.p
-            variants={staggerItem}
-            className="mx-auto mb-8 text-center text-gray-300 md:mx-0 md:text-left"
-          >
-            Desarrollador full stack (C# / .NET y React) enfocado en construir
-            software mantenible aplicando arquitectura Onion y patrones de
-            diseño. Trabajo con desarrollo guiado por especificaciones y flujos
-            asistidos por agentes de IA para acelerar la entrega sin sacrificar
-            la calidad del código.
-          </motion.p>
-
-          <motion.div
-            variants={staggerItem}
-            className="flex flex-wrap items-center justify-center gap-3 md:justify-start"
-          >
-            <Link
-              href="/portfolio"
-              className="inline-flex items-center gap-2 px-4 py-2 transition-all border rounded-xl border-white/20 hover:border-white hover:shadow-white/30 hover:shadow-lg text-md w-fit"
-            >
-              <FolderGit2 size={18} /> Ver proyectos
-            </Link>
-
+        <div className="flex flex-col items-center gap-4 md:items-start">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-4 py-2 font-semibold transition-all border rounded-xl border-tamarillo-500 bg-tamarillo-500 hover:bg-transparent hover:text-tamarillo-400 text-md w-fit hover:shadow-tamarillo-950/40 hover:shadow-lg"
+              className="liquid-hover inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-tamarillo-700 bg-tamarillo-700 px-5 py-3 font-semibold text-white transition-colors hover:bg-tamarillo-600 focus-visible:outline-offset-4"
             >
-              <MessageCircle size={18} /> Contáctame
+              <MessageCircle size={18} aria-hidden="true" /> Hablemos de tu proyecto
             </Link>
 
-            <a
-              href={contactInfo.cvUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 transition-all border rounded-xl text-amber-500 border-amber-600/60 hover:shadow-amber-950/40 hover:shadow-lg text-md w-fit"
+            <Link
+              href="/portfolio"
+              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-white/20 px-5 py-3 font-medium text-white transition-colors hover:border-white/60 hover:bg-white/5"
             >
-              <FileText size={18} /> Mi CV
-            </a>
-          </motion.div>
-        </motion.div>
+              <FolderGit2 size={18} aria-hidden="true" /> Ver proyectos
+            </Link>
+          </div>
+
+          <a
+            href={contactInfo.cvUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center gap-2 px-3 py-2 font-medium text-my-green-100 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white"
+          >
+            <FileText size={18} aria-hidden="true" /> Ver mi CV
+          </a>
+        </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default Introduction;

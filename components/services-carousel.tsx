@@ -1,98 +1,164 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Keyboard, Navigation, Pagination, A11y } from "swiper/modules";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { Autoplay, Pagination, A11y } from "swiper/modules";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { useMotionPreference } from "@/components/motion-preferences";
 import { serviceData } from "@/data";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 const ServicesCarousel = () => {
-  // Respeta prefers-reduced-motion: sin autoplay si el usuario lo pide.
-  const [reducedMotion, setReducedMotion] = useState(true);
+  const reducedMotion = useMotionPreference();
+  const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [inView, setInView] = useState(true);
+  const root = useRef<HTMLDivElement>(null);
+  const manualTransition = useRef(false);
 
   useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(query.matches);
+    const update = () => setVisible(!document.hidden);
     update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    document.addEventListener("visibilitychange", update);
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    if (root.current) observer.observe(root.current);
+    return () => {
+      document.removeEventListener("visibilitychange", update);
+      observer.disconnect();
+    };
   }, []);
 
+  useEffect(() => {
+    if (!swiper || swiper.destroyed) return;
+    if (reducedMotion || paused || hovered || focused || !visible || !inView) {
+      // Stopping autoplay alone leaves its current seven-second CSS slide moving.
+      const position = swiper.getTranslate();
+      swiper.autoplay.stop();
+      if (!manualTransition.current) {
+        swiper.wrapperEl.style.transitionDuration = "0ms";
+        swiper.setTranslate(position);
+        swiper.animating = false;
+        swiper.updateProgress();
+        swiper.updateSlidesClasses();
+      }
+    } else if (!swiper.autoplay.running) {
+      swiper.autoplay.start();
+    }
+  }, [swiper, reducedMotion, paused, hovered, focused, visible, inView]);
+
+  const navigate = (direction: "previous" | "next") => {
+    if (!swiper) return;
+    manualTransition.current = true;
+    setPaused(true);
+    swiper.autoplay.stop();
+    if (direction === "previous") swiper.slidePrev(reducedMotion ? 0 : 350);
+    else swiper.slideNext(reducedMotion ? 0 : 350);
+  };
+
   return (
-    <div className="relative w-full">
-      <Swiper
-        modules={[Autoplay, Keyboard, Navigation, Pagination, A11y]}
-        breakpoints={{
-          320: { slidesPerView: 1, spaceBetween: 16 },
-          768: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 3, spaceBetween: 24 },
-        }}
-        keyboard={{ enabled: true }}
-        a11y={{ enabled: true }}
-        pagination={{ clickable: true }}
-        navigation={{
-          prevEl: ".services-prev",
-          nextEl: ".services-next",
-        }}
-        autoplay={
-          reducedMotion
-            ? false
-            : {
-                delay: 4000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }
+    <div
+      ref={root}
+      role="region"
+      aria-label="Servicios disponibles"
+      tabIndex={0}
+      className="relative w-full rounded-xl focus-visible:outline-offset-4"
+      onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
+      onPointerLeave={() => setHovered(false)}
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+          event.preventDefault();
+          navigate(event.key === "ArrowLeft" ? "previous" : "next");
         }
+      }}
+      onClickCapture={(event) => {
+        if (event.target instanceof Element && event.target.closest(".swiper-pagination-bullet") && swiper) {
+          manualTransition.current = true;
+          swiper.params.speed = reducedMotion ? 0 : 350;
+          swiper.autoplay.stop();
+          setPaused(true);
+        }
+      }}
+    >
+      <Swiper
+        modules={[Autoplay, Pagination, A11y]}
+        onSwiper={setSwiper}
+        slidesPerView="auto"
+        centeredSlides
+        spaceBetween={24}
+        speed={reducedMotion ? 0 : 500}
+        pagination={{ clickable: true, renderBullet: (index, className) => `<button type="button" class="${className}" aria-label="Ir al servicio ${index + 1}"></button>` }}
+        a11y={{ enabled: true, paginationBulletMessage: "Ir al servicio {{index}}" }}
+        autoplay={reducedMotion ? false : { delay: 6500, disableOnInteraction: false }}
+        onSliderFirstMove={(instance) => {
+          manualTransition.current = true;
+          instance.params.speed = reducedMotion ? 0 : 350;
+          setPaused(true);
+        }}
+        onTransitionEnd={(instance) => {
+          manualTransition.current = false;
+          instance.params.speed = reducedMotion ? 0 : 500;
+        }}
+        onClick={(instance, event) => {
+          if (event.target instanceof Element && event.target.closest(".swiper-pagination-bullet")) {
+            setPaused(true);
+            instance.autoplay.stop();
+          }
+        }}
         loop
-        className="!pb-14"
+        className="services-carousel !pb-14"
       >
-        {serviceData.map((service, index) => (
-          <SwiperSlide key={index} className="h-auto">
+        {serviceData.map((service) => (
+          <SwiperSlide key={service.title} className="!h-auto">
             <article className="card-glass card-glass-hover group flex h-full flex-col">
-              <span className="flex items-center justify-center mb-4 text-3xl transition-colors duration-300 rounded-xl w-12 h-12 bg-tamarillo-500/20 text-tamarillo-400 group-hover:bg-tamarillo-500 group-hover:text-white">
+              <span aria-hidden="true" className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-tamarillo-500/20 text-tamarillo-300">
                 {service.icon}
               </span>
-              <h3 className="mb-1 text-lg font-bold text-white">
-                {service.title}
-              </h3>
-              <p className="mb-3 text-sm font-medium text-tamarillo-400">
-                {service.benefit}
-              </p>
-              <p className="mb-4 text-sm text-gray-300">{service.description}</p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {service.tags.map((tag, i) => (
-                  <span key={i} className="tech-badge">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <h2 className="mb-1 text-lg font-bold text-white">{service.title}</h2>
+              <p className="mb-3 text-sm font-medium text-tamarillo-300">{service.benefit}</p>
+              <p className="mb-4 max-w-prose text-base leading-relaxed text-my-green-100">{service.description}</p>
+              <ul className="mt-auto flex flex-wrap gap-2" aria-label={`Tecnologías para ${service.title}`}>
+                {service.tags.map((tag) => <li key={tag} className="tech-badge">{tag}</li>)}
+              </ul>
             </article>
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Controles de navegación accesibles */}
-      <div className="flex justify-center gap-3 mt-2">
-        <button
-          type="button"
-          aria-label="Servicio anterior"
-          className="services-prev flex items-center justify-center w-10 h-10 text-white transition-colors border rounded-full border-white/15 bg-my-green-800/50 hover:border-tamarillo-500/60 hover:text-tamarillo-400"
-        >
-          <ChevronLeft size={20} />
+      <div className="mx-auto mt-2 flex w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-2xl bg-my-green-950 px-4 py-3">
+        <button type="button" aria-label="Servicio anterior" onClick={() => navigate("previous")} className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white hover:bg-my-green-900">
+          <ChevronLeft size={20} aria-hidden="true" />
         </button>
-        <button
-          type="button"
-          aria-label="Servicio siguiente"
-          className="services-next flex items-center justify-center w-10 h-10 text-white transition-colors border rounded-full border-white/15 bg-my-green-800/50 hover:border-tamarillo-500/60 hover:text-tamarillo-400"
-        >
-          <ChevronRight size={20} />
+        {!reducedMotion && (
+          <button
+            type="button"
+            aria-pressed={paused}
+            aria-label="Pausar recorrido automático"
+            onClick={() => {
+              manualTransition.current = false;
+              setPaused((current) => !current);
+            }}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-sm text-white hover:bg-my-green-900"
+          >
+            {paused ? <Play size={16} aria-hidden="true" /> : <Pause size={16} aria-hidden="true" />}
+            {paused ? "Reanudar recorrido" : "Pausar recorrido"}
+          </button>
+        )}
+        <button type="button" aria-label="Servicio siguiente" onClick={() => navigate("next")} className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white hover:bg-my-green-900">
+          <ChevronRight size={20} aria-hidden="true" />
         </button>
       </div>
+      <p className="reading-label mx-auto mt-3 text-center text-xs leading-relaxed text-my-green-100">
+        Desliza o usa las flechas. Al elegir un servicio, el recorrido se pausa para leerlo.
+      </p>
     </div>
   );
 };

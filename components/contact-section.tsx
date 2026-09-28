@@ -1,84 +1,63 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { contactChannels, contactInfo, socialNetworks } from "@/data";
-import { staggerContainer, staggerItem } from "@/utils/motion-transitions";
 import { MapPin } from "lucide-react";
+import { contactChannels, contactInfo, socialNetworks } from "@/data";
 
-const ContactSection = () => {
-  return (
-    <motion.div
-      variants={staggerContainer(0.12, 0.15)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      className="w-full max-w-4xl mx-auto"
-    >
-      {/* Canales directos */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-        {contactChannels.map((channel) => (
-          <motion.div key={channel.id} variants={staggerItem}>
-            <Link
-              href={channel.href}
-              target={channel.external ? "_blank" : undefined}
-              rel={channel.external ? "noopener noreferrer" : undefined}
-              className="flex flex-col items-center h-full gap-3 text-center card-glass card-glass-hover group"
+const ContactSection = () => (
+  <section aria-label="Canales de contacto" className="mx-auto w-full max-w-4xl">
+    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {contactChannels.map((channel) => (
+        <li key={channel.id}>
+          <Link
+            href={channel.href}
+            target={channel.external ? "_blank" : undefined}
+            rel={channel.external ? "noopener noreferrer" : undefined}
+            className={`card-glass card-glass-hover liquid-hover group flex min-h-40 h-full flex-col items-center justify-center gap-3 text-center ${
+              channel.label === "WhatsApp" ? "border-tamarillo-500/40" : ""
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-tamarillo-500/15 text-tamarillo-300 transition-colors group-hover:bg-tamarillo-700 group-hover:text-white"
             >
-              <span className="flex items-center justify-center rounded-full w-14 h-14 bg-tamarillo-500/20 text-tamarillo-400 transition-colors duration-300 group-hover:bg-tamarillo-500 group-hover:text-white">
-                {channel.icon}
+              {channel.icon}
+            </span>
+            <span>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-my-green-100 group-hover:text-white">
+                {channel.label}
               </span>
-              <div>
-                <p className="text-sm uppercase tracking-wide text-white/60">
-                  {channel.label}
-                </p>
-                <p className="font-semibold text-white break-words">
-                  {channel.value}
-                </p>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+              <span className="mt-1 block break-words font-semibold text-white">
+                {channel.value}
+              </span>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+
+    <div className="card-glass mt-5 flex flex-col items-center justify-between gap-5 sm:flex-row">
+      <div className="flex items-center gap-2 text-white/90">
+        <MapPin size={20} className="text-tamarillo-300" aria-hidden="true" />
+        <span>{contactInfo.location}</span>
       </div>
 
-      {/* Ubicación + redes */}
-      <motion.div
-        variants={staggerItem}
-        className="flex flex-col items-center justify-between gap-6 mt-8 sm:flex-row card-glass"
-      >
-        <div className="flex items-center gap-2 text-white/80">
-          <MapPin size={20} className="text-tamarillo-400" />
-          <span>{contactInfo.location}</span>
-        </div>
-
-        <div className="flex items-center gap-6">
-          {socialNetworks.map(({ id, logo, src }) => (
+      <ul className="flex items-center gap-2" aria-label="Redes sociales">
+        {socialNetworks.map(({ id, label, logo, src }) => (
+          <li key={id}>
             <Link
-              key={id}
               href={src}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:text-tamarillo-500 hover:scale-110"
+              aria-label={label}
+              title={label}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-tamarillo-300"
             >
-              {logo}
+              <span aria-hidden="true">{logo}</span>
             </Link>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* CTA principal a WhatsApp */}
-      <motion.div variants={staggerItem} className="flex justify-center mt-10">
-        <Link
-          href={contactInfo.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-6 py-3 font-semibold transition-all border rounded-xl border-tamarillo-500 bg-tamarillo-500 hover:bg-transparent hover:text-tamarillo-400 hover:shadow-lg hover:shadow-tamarillo-950/40"
-        >
-          Escríbeme por WhatsApp
-        </Link>
-      </motion.div>
-    </motion.div>
-  );
-};
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+);
 
 export default ContactSection;

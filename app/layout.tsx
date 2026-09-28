@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Header from "@/components/header";
+import LiquidEffects from "@/components/liquid-effects";
+import LiquidBackground from "@/components/liquid-background";
+import { MotionPreferencesProvider } from "@/components/motion-preferences";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,10 +33,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <Navbar />
-
-        {children}
+        <a
+          href="#main-content"
+          className="sr-only z-50 rounded-lg bg-my-green-950 px-4 py-3 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Saltar al contenido principal
+        </a>
+        <MotionPreferencesProvider>
+          <Header />
+          <Navbar />
+          <LiquidBackground />
+          <LiquidEffects />
+          {children}
+        </MotionPreferencesProvider>
       </body>
     </html>
   );

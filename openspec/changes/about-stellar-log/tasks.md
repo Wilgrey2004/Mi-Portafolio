@@ -1,0 +1,7 @@
+- [x] Abrir con la experiencia actual y acceso al portafolio.
+- [x] Revisar los repositorios públicos y priorizar cotizaciones y SETEA en portafolio y trayectoria.
+- [x] Organizar trayectoria en capítulos con información compartida en data.tsx.
+- [x] Integrar captura de LOGUZ y agrupar certificados accesibles.
+- [x] Mantener identidad estelar y contraste por sombras sin paneles de texto.
+- [x] Comprobar TypeScript y build de producción.
+- [x] Revisar escritorio (1280 px), móvil (390 y 320 px), carga de LOGUZ y desplegable con ratón y teclado en navegador.

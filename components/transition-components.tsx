@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { fadeIn, fadeInUp } from "@/utils/motion-transitions";
+import { useMotionPreference } from "@/components/motion-preferences";
 
 export type MotionTransitionProps = {
   children: React.ReactNode;
@@ -11,11 +12,12 @@ export type MotionTransitionProps = {
 
 export function MotionTransition(props: MotionTransitionProps) {
   const { children, className, position } = props;
+  const reduceMotion = useMotionPreference();
 
   return (
     <motion.div
       variants={fadeIn(position)}
-      initial="hidden"
+      initial={reduceMotion ? false : "hidden"}
       animate="visible"
       exit="hidden"
       className={className}
@@ -34,11 +36,12 @@ export type RevealOnScrollProps = {
 // Revela su contenido cuando entra en el viewport (una sola vez).
 export function RevealOnScroll(props: RevealOnScrollProps) {
   const { children, className, delay = 0 } = props;
+  const reduceMotion = useMotionPreference();
 
   return (
     <motion.div
       variants={fadeInUp(delay)}
-      initial="hidden"
+      initial={reduceMotion ? false : "hidden"}
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       className={className}

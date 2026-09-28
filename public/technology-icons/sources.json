@@ -1,0 +1,11 @@
+{
+  "spec-kit.webp": "https://raw.githubusercontent.com/github/spec-kit/main/media/logo_small.webp",
+  "isar.png": "https://raw.githubusercontent.com/isar/isar/main/docs/docs/.vuepress/public/icon-256x256.png",
+  "csharp.svg": "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/csharp/csharp-original.svg",
+  "oracle.svg": "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/oracle/oracle-original.svg",
+  "vs-code.svg": "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/vscode/vscode-original.svg",
+  "openai.svg": "https://cdn.jsdelivr.net/npm/simple-icons@12.0.0/icons/openai.svg",
+  "sql-server.svg": "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/microsoftsqlserver/microsoftsqlserver-original.svg",
+  "visual-studio.svg": "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/visualstudio/visualstudio-plain.svg",
+  "openspec.svg": "https://raw.githubusercontent.com/Fission-AI/OpenSpec/main/website/app/icon.svg"
+}

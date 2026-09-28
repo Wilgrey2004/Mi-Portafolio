@@ -1,36 +1,28 @@
-"use client";
-
-import CircleImage from "@/components/circle-Image";
 import ContainerPage from "@/components/container";
 import ContactSection from "@/components/contact-section";
-import CoverParticles from "@/components/cover-particles";
-import TransitionPages from "@/components/transition-pages";
-import { RevealOnScroll } from "@/components/transition-components";
-import React from "react";
+import LiquidBackground from "@/components/liquid-background";
 
-const ContactPage = () => {
-  return (
-    <>
-      <CoverParticles />
-      <TransitionPages />
-      <CircleImage />
+const ContactPage = () => (
+  <main id="main-content" className="relative isolate bg-my-green-950">
+    <LiquidBackground variant="contact" />
 
+    <div className="relative z-10">
       <ContainerPage>
-        <RevealOnScroll>
+        <header className="reading-surface mx-auto mb-10 max-w-2xl text-center">
           <h1 className="section-title mb-4 text-center">
             Hablemos de tu{" "}
-            <span className="font-bold text-tamarillo-500">proyecto</span>
+            <span className="font-bold text-tamarillo-400">proyecto</span>
           </h1>
-          <p className="max-w-2xl mx-auto mb-10 text-center text-gray-300">
-            ¿Tienes una idea o una vacante? Contáctame directamente por
-            WhatsApp, correo o redes. Respondo lo antes posible. 🚀
+          <p className="text-base leading-relaxed text-gray-200">
+            Cuéntame qué necesitas o qué oportunidad tienes en mente. Puedes
+            escribirme por WhatsApp, correo o LinkedIn.
           </p>
-        </RevealOnScroll>
+        </header>
 
         <ContactSection />
       </ContainerPage>
-    </>
-  );
-};
+    </div>
+  </main>
+);
 
 export default ContactPage;

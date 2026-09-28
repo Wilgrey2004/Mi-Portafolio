@@ -1,37 +1,47 @@
 "use client";
-import { MotionTransition } from "@/components/transition-components";
-import { itemsNavbar } from "@/data";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import React from "react";
 
-export const Navbar = () => {
+import { itemsNavbar } from "@/data";
+import { MotionToggle } from "@/components/motion-preferences";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const mobileLabels: Record<string, string> = {
+  "/": "Inicio",
+  "/about-me": "Perfil",
+  "/services": "Servicios",
+  "/technologies": "Tecnol.",
+  "/portfolio": "Proyectos",
+  "/contact": "Contacto",
+};
+
+const Navbar = () => {
   const route = usePathname();
+
   return (
-    <MotionTransition
-      position="right"
-      className="flex z-40 fixed flex-col items-center w-full justify-center mt-auto h-max bottom-4 md:bottom-5"
-    >
-      <nav>
-        <div className="flex items-center justify-center gap-1 px-3 py-1 rounded-full bg-white/50 backdrop-blur-md sm:gap-2 sm:px-4">
-          {itemsNavbar.map((item) => (
-            <div
-              key={item.id}
-              className={`relative px-2 py-2 transition duration-150 rounded-full group sm:px-3 hover:bg-tamarillo-500 hover:-translate-y-1 hover:scale-110 ${
-                route === item.link && "bg-tamarillo-500"
-              }`}
-            >
-              <Link href={item.link} aria-label={item.title}>
-                {item.icon}
+    <nav aria-label="Navegación principal" className="site-nav fixed inset-x-0 z-40 mx-auto">
+      <div className="navigation-dock flex w-full items-center">
+        <div className="grid min-w-0 flex-1 grid-cols-6">
+          {itemsNavbar.map((item) => {
+            const active = route === item.link;
+            return (
+              <Link
+                key={item.id}
+                href={item.link}
+                aria-label={item.title}
+                aria-current={active ? "page" : undefined}
+                className={`navigation-link relative flex min-h-14 min-w-11 flex-col items-center justify-center gap-1 py-2 text-[0.625rem] font-medium leading-tight transition-colors focus-visible:outline-offset-[-3px] sm:text-xs md:flex-row md:gap-2 md:px-1 md:text-[0.8125rem] ${active ? "text-tamarillo-300" : "text-white/80 hover:text-white"}`}
+              >
+                <span aria-hidden="true" className="flex h-5 w-5 shrink-0 items-center justify-center">{item.icon}</span>
+                <span aria-hidden="true" className="whitespace-nowrap sm:hidden">{mobileLabels[item.link] ?? item.title}</span>
+                <span aria-hidden="true" className="hidden whitespace-nowrap sm:inline">{item.title}</span>
+                {active && <span aria-hidden="true" className="navigation-active-marker" />}
               </Link>
-              <span className="absolute px-2 py-1 text-xs text-white transition-opacity -translate-x-1/2 rounded-md opacity-0 pointer-events-none bottom-14 left-1/2 bg-my-green-950/90 whitespace-nowrap group-hover:opacity-100">
-                {item.title}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </nav>
-    </MotionTransition>
+        <MotionToggle />
+      </div>
+    </nav>
   );
 };
 

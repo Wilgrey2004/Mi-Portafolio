@@ -1,69 +1,79 @@
-"use client";
-
 import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Github, ExternalLink } from "lucide-react";
-import { staggerItem } from "@/utils/motion-transitions";
-import React from "react";
+import { ExternalLink, Github } from "lucide-react";
 
-interface porfoleoProps {
-  data: {
-    id: number;
-    title: string;
-    image: string;
-    urlGithub: string;
-    urlDemo: string;
-  };
+interface PortfolioProject {
+  id: number;
+  priority?: number;
+  title: string;
+  description?: string;
+  image: string | null;
+  urlGithub: string;
+  urlDemo: string;
+  urlRelated?: { label: string; url: string };
 }
 
-const PorfoleoBox = (props: porfoleoProps) => {
-  const { data } = props;
-  const { title, image, urlGithub, urlDemo } = data;
+type PortfolioBoxProps = {
+  data: PortfolioProject;
+};
+
+const PorfoleoBox = ({ data }: PortfolioBoxProps) => {
+  const hasProjectRepository = data.urlGithub !== "https://github.com/Wilgrey2004";
 
   return (
-    <motion.div
-      variants={staggerItem}
-      className="flex flex-col overflow-hidden card-glass card-glass-hover group !p-0"
-    >
-      <div className="relative overflow-hidden">
-        <Image
-          src={image}
-          width={400}
-          height={260}
-          alt={title}
-          className="w-full h-[180px] object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-my-green-950/80 to-transparent" />
-      </div>
+    <article className="card-glass liquid-hover flex h-full flex-col overflow-hidden !p-0">
+      {data.image && (
+        <div className="relative aspect-[16/10] overflow-hidden bg-my-green-950">
+          <Image
+            src={data.image}
+            fill
+            sizes="(max-width: 639px) calc(100vw - 32px), (max-width: 1023px) 50vw, (max-width: 1152px) 33vw, 360px"
+            alt={`Captura de ${data.title}`}
+            className="object-cover"
+          />
+        </div>
+      )}
 
-      <div className="flex flex-col flex-1 p-4">
-        <h3 className="mb-4 text-base font-semibold text-white">{title}</h3>
+      <div className="flex flex-1 flex-col p-4">
+        <h2 className="mb-2 text-lg font-semibold leading-snug text-white">
+          {data.title}
+        </h2>
+        {data.description && <p className="mb-5 text-sm leading-relaxed text-gray-200">{data.description}</p>}
 
-        <div className="flex flex-wrap gap-2 mt-auto">
-          {urlGithub && (
-            <Link
-              href={urlGithub}
+        <div className="mt-auto flex flex-wrap gap-2">
+          {data.urlGithub && (
+            <a
+              href={data.urlGithub}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm transition duration-150 rounded-lg bg-white/10 hover:bg-white/20"
+              aria-label={`${hasProjectRepository ? "Abrir repositorio" : "Ver perfil de GitHub"}: ${data.title}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
             >
-              <Github size={16} /> Repositorio
-            </Link>
+              <Github size={16} aria-hidden="true" />
+              {hasProjectRepository ? "Repositorio" : "Perfil GitHub"}
+            </a>
           )}
-          {urlDemo && (
-            <Link
-              href={urlDemo}
+          {data.urlDemo && (
+            <a
+              href={data.urlDemo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-2 text-sm transition duration-150 rounded-lg bg-tamarillo-500 hover:bg-tamarillo-600"
+              aria-label={`${data.urlDemo.includes("linkedin.com") ? "Abrir publicación" : "Abrir demostración"} de ${data.title}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-tamarillo-700 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-tamarillo-600"
             >
-              <ExternalLink size={16} /> Ver demo
-            </Link>
+              <ExternalLink size={16} aria-hidden="true" />
+              {data.urlDemo.includes("linkedin.com") ? "Ver publicación" : "Ver demo"}
+            </a>
+          )}
+          {data.urlRelated && (
+            <a href={data.urlRelated.url} target="_blank" rel="noopener noreferrer"
+              aria-label={`Abrir ${data.urlRelated.label}: ${data.title}`}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10">
+              <Github size={16} aria-hidden="true" />{data.urlRelated.label}
+            </a>
           )}
         </div>
       </div>
-    </motion.div>
+    </article>
   );
 };
 

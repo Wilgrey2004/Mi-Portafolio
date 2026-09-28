@@ -1,52 +1,53 @@
-"use client";
-
-import Avatarporfoleo from "@/components/avatar-porfoleo";
-import CircleImage from "@/components/circle-Image";
 import ContainerPage from "@/components/container";
 import PorfoleoBox from "@/components/porfoleo-box";
-import TransitionPages from "@/components/transition-pages";
-import { RevealOnScroll } from "@/components/transition-components";
+import StellarBackground from "@/components/stellar-background";
 import { dataPortfolio } from "@/data";
-import { staggerContainer } from "@/utils/motion-transitions";
-import { motion } from "framer-motion";
-import React from "react";
+import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 
-const PorfoleoPage = () => {
-  return (
-    <>
-      <TransitionPages />
-      <CircleImage />
+const featuredProjects = [...dataPortfolio].sort(
+  (a, b) => (a.priority ?? Number.MAX_SAFE_INTEGER) - (b.priority ?? Number.MAX_SAFE_INTEGER)
+    || Number(Boolean(b.image)) - Number(Boolean(a.image))
+);
 
+const PorfoleoPage = () => (
+  <main id="main-content" className="relative isolate">
+    <StellarBackground />
+    <div className="relative z-10">
       <ContainerPage>
-        <div className="flex flex-col justify-center h-full">
-          <RevealOnScroll>
-            <h1 className="section-title mb-2 text-center">
-              Mis últimos{" "}
-              <span className="font-bold text-tamarillo-500">
-                trabajos realizados
-              </span>
-            </h1>
-            <p className="max-w-2xl mx-auto mb-10 text-center text-gray-300">
-              Una selección de proyectos personales, académicos y profesionales
-              con distintas tecnologías del stack.
-            </p>
-          </RevealOnScroll>
-
-          <motion.div
-            variants={staggerContainer(0.08, 0.1)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            className="relative z-10 grid max-w-6xl gap-6 mx-auto sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {dataPortfolio.map((item) => (
-              <PorfoleoBox key={item.id} data={item} />
-            ))}
-          </motion.div>
+        <header className="reading-surface mb-10 text-center">
+          <h1 className="section-title mb-3 justify-center text-center">
+            Proyectos <span className="font-bold text-tamarillo-400">seleccionados</span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-base leading-relaxed text-gray-200">
+            Una muestra de proyectos personales, académicos y profesionales.
+            Consulta el código, las capturas disponibles o sus publicaciones.
+          </p>
+        </header>
+  
+        <div className="grid max-w-6xl gap-5 sm:mx-auto sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((item) => (
+            <PorfoleoBox key={item.id} data={item} />
+          ))}
         </div>
+  
+        <section className="reading-surface mx-auto mt-12 flex max-w-6xl flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-white">¿Tienes un proyecto parecido?</h2>
+            <p className="mt-1 text-sm text-gray-200">
+              Cuéntame qué quieres resolver y vemos cómo convertirlo en software.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-xl bg-tamarillo-700 px-5 py-3 font-semibold text-white transition-colors hover:bg-tamarillo-600"
+          >
+            <MessageCircle size={18} aria-hidden="true" /> Hablemos
+          </Link>
+        </section>
       </ContainerPage>
-    </>
-  );
-};
+    </div>
+  </main>
+);
 
 export default PorfoleoPage;
